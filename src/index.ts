@@ -74,6 +74,7 @@ function _set(value: any, path: Path, object: any): any {
   let reference = object;
 
   parsedPath.forEach((key, index) => {
+    if (isPrototypePolluted(key)) return false;
     if (index === parsedPath.length - 1) {
       reference[key] = value;
       return;
@@ -88,7 +89,9 @@ function _set(value: any, path: Path, object: any): any {
 
   return object;
 }
-
+function isPrototypePolluted(key) {
+  return ['__proto__', 'prototype', 'constructor'].includes(key);
+}
 export const get = curry(_get);
 export const getOr = curry(_getOr);
 export const has = curry(_has);
